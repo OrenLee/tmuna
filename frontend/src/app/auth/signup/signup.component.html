@@ -1,0 +1,28 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Signup</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form (submit)="onSignup(signupForm)" #signupForm="ngForm">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input ngModel id="email" class="form-control" placeholder="Enter Your Email" name="email">
+        <label for="password">Password</label>
+        <input ngModel id="password" class="form-control" placeholder="Enter Your Password" name="password">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="modal.close('Save click')" type="submit">Submit</button>
+      </div>
+    </form>
+  </div>
+
+</ng-template>
+
+<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Signup button temp</button>
+
+<hr>
+
+<pre>{{ closeResult }}</pre>
