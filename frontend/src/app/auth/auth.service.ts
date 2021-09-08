@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Subject, Observable } from 'rxjs';
 
 const BACKEND_URL = 'http://localhost:8080/user';
 
@@ -7,6 +8,7 @@ const BACKEND_URL = 'http://localhost:8080/user';
   providedIn: 'root'
 })
 export class AuthService {
+  private authModalListener = new Subject<boolean>();
 
   constructor(private http: HttpClient) { }
 
@@ -33,4 +35,17 @@ export class AuthService {
     );
     return false;
   }*/
+
+  openSignup(): void {
+    console.log('In sign up service auth');
+  }
+
+  getModalStatus(): Observable<boolean> {
+    return this.authModalListener.asObservable();
+  }
+
+  openModal(): void {
+    console.log('open modal service');
+    this.authModalListener.next(true);
+  }
 }
