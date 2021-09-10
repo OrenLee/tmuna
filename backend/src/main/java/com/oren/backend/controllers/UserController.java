@@ -1,7 +1,8 @@
 package com.oren.backend.controllers;
 
 import com.oren.backend.beans.User;
-import com.oren.backend.services.UserServiceImpl;
+import com.oren.backend.exceptions.TmunaSystemException;
+import com.oren.backend.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,16 +12,19 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    @GetMapping("/user")
-    public User getUser(String username, String password){
-        return User.builder().username("oren").password("99999").build();
+    @PostMapping("/signup")
+    public ResponseEntity<?> createUser(@RequestBody User user) throws TmunaSystemException {
+        System.out.println("Create user");
+        this.userService.createUser(user);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PostMapping("/user")
-    public ResponseEntity<?> createUser(@RequestBody User user){
-        System.out.println("Create user");
-         return new ResponseEntity<>(HttpStatus.CREATED);
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody User user) throws TmunaSystemException {
+        System.out.println("in login, user email: " + user.getEmail());
+        User userInRepo = this.userService.login(user);
+        return new ResponseEntity<>(userInRepo, HttpStatus.CREATED);
     }
 }

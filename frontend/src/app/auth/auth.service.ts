@@ -1,51 +1,62 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Subject, Observable } from 'rxjs';
+import { User } from './user.model';
 
-const BACKEND_URL = 'http://localhost:8080/user';
+const BACKEND_URL = 'http://localhost:8080';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private authModalListener = new Subject<boolean>();
+  private currentUser: User;
+  private authStatusListener = new Subject<boolean>();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
-  createUser(username: string, password: string): void {
-    this.http.post(BACKEND_URL, { username, password }).subscribe(
-      () => {
+  createUser(email: string, password: string): void {
+    this.http.post(BACKEND_URL + '/signup', { email, password }).subscribe(
+      response => {
+        this.router.navigate(['/imageUpload']);
+        this.authStatusListener.next(true);
+        console.log('response create: ' + response);
         console.log('success in GET METHOD!!!!!!!!!!!!!!!');
       },
       error => {
+        this.authStatusListener.next(false);
         console.log('error in GET METHOD');
       }
     );
   }
 
-  /* login(username: string, password: string): boolean {
-    this.http.get(BACKEND_URL, { username, password }).subscribe(
-        () => {
-          return true;
+  getUser(): User {
+    return this.currentUser;
+  }
+
+  login(email: string, password: string): void {
+    console.log('email: ' + email);
+    this.http.post(BACKEND_URL + '/login', { email, password }).subscribe(
+        (response: User) => {
+          console.log('login success!');
+          this.authStatusListener.next(true);
+          console.log('response login: ' + JSON.stringify(response));
+          this.currentUser = response;
+          this.router.navigate(['/']); // Change To myImages
         },
         error => {
-          console.log('Error in Get');
-          return false;
+          console.log('login failed!');
+          this.authStatusListener.next(false);
         }
     );
-    return false;
-  }*/
-
-  openSignup(): void {
-    console.log('In sign up service auth');
   }
 
-  getModalStatus(): Observable<boolean> {
-    return this.authModalListener.asObservable();
+  getAuthStatusListener(): Observable<boolean> {
+    return this.authStatusListener.asObservable();
   }
 
-  openModal(): void {
-    console.log('open modal service');
-    this.authModalListener.next(true);
+  logout(): void {
+    this.authStatusListener.next(false);
+    this.router.navigate(['/imageUpload']);
   }
 }

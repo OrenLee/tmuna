@@ -2,7 +2,9 @@ package com.oren.backend.services;
 
 
 import com.oren.backend.beans.User;
+import com.oren.backend.exceptions.TmunaSystemException;
 
 public interface UserService {
-    boolean createUser(User user);
+    void createUser(User user) throws TmunaSystemException;
+    User login(User user) throws TmunaSystemException;
 }

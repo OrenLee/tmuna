@@ -8,15 +8,19 @@
     <ng-template ngbNavContent>Upload Image</ng-template>
   </li>
   <li ngbNavItem>
-    <a ngbNavLink routerLink="">Get My Images</a>
+    <a ngbNavLink routerLink="myImages">Get My Images</a>
     <ng-template ngbNavContent>Second content</ng-template>
   </li>
-  <li ngbNavItem  class="ml-auto">
+  <li *ngIf="!userIsAuthenticated" ngbNavItem  class="ml-auto">
     <a class="btn btn-primary" ngbNavLink routerLink="login">Login</a>
     <ng-template ngbNavContent></ng-template>
   </li>
-  <li ngbNavItem  class="ml-auto">
+  <li *ngIf="!userIsAuthenticated" ngbNavItem  class="ml-auto">
     <a class="btn btn-danger" ngbNavLink routerLink="signup" (click)="openSignUp()">Signup</a>
+    <ng-template ngbNavContent></ng-template>
+  </li>
+  <li *ngIf="userIsAuthenticated" ngbNavItem  class="ml-auto">
+    <a class="btn btn-danger" ngbNavLink routerLink="logout" (click)="logout()">logout</a>
     <ng-template ngbNavContent></ng-template>
   </li>
 </ul>

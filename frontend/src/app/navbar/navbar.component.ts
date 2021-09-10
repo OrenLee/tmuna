@@ -7,15 +7,23 @@ import { AuthService } from '../auth/auth.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
+  userIsAuthenticated: boolean;
 
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
+    this.authService.getAuthStatusListener().subscribe(
+      () =>
+          this.userIsAuthenticated = !this.userIsAuthenticated
+      );
   }
 
   openSignUp(): void {
     console.log('Navbar Signup opening');
-    this.authService.openModal();
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 
 }

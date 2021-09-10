@@ -1,1 +1,12 @@
-<p>login works!</p>
+<h3>Login</h3>
+<div class="container-fluid">
+  <form (submit)="onLogin(loginForm)" #loginForm="ngForm">
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input ngModel id="email" class="form-control" placeholder="Enter Your Email" name="email">
+      <label for="password">Password</label>
+      <input ngModel id="password" class="form-control" placeholder="Enter Your Password" name="password">
+      <button class="btn btn-primary" type="submit">Submit</button>
+    </div>
+  </form>
+</div>
